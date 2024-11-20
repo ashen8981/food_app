@@ -20,7 +20,6 @@ class MenuScreen extends StatefulWidget {
 
 class MenuScreenState extends State<MenuScreen> {
   late Future<void> _initialLoadFuture;
-  String selectedMenuTitle = 'All Items';
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -47,18 +46,11 @@ class MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-
-    final itemViewModel = Provider.of<ItemViewModel>(context, listen: false);
-    final groupedItems = <String, List<Item>>{};
-    final items = itemViewModel.getItemsForSelectedCategory();
-    for (var item in items) {
-      groupedItems.putIfAbsent(item.menuTitle, () => []).add(item);
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
+          // Top section: Background image, title, toggle button
           Stack(
             clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
@@ -126,6 +118,7 @@ class MenuScreenState extends State<MenuScreen> {
             child: const MenuDropdownAndSearch(),
           ),
           SizedBox(height: screenHeight * 0.025),
+          // Category filter section
           Consumer<MenuViewModel>(
             builder: (context, menuViewModel, child) {
               return CategoryFilter(
@@ -136,12 +129,15 @@ class MenuScreenState extends State<MenuScreen> {
               );
             },
           ),
+          // Main section: Grouped menu items
           Expanded(
             child: Consumer<ItemViewModel>(
               builder: (context, itemViewModel, child) {
+                // Map to group items by menuTitle
                 final groupedItems = <String, List<Item>>{};
                 final items = itemViewModel.getItemsForSelectedCategory();
 
+                // Group items based on their menuTitle
                 for (var item in items) {
                   groupedItems.putIfAbsent(item.menuTitle, () => []).add(item);
                 }
@@ -152,7 +148,7 @@ class MenuScreenState extends State<MenuScreen> {
                   itemBuilder: (context, groupIndex) {
                     final menuTitle = groupedItems.keys.elementAt(groupIndex);
                     final itemList = groupedItems[menuTitle]!;
-
+                    // Display each group (menuTitle and its items)
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -170,6 +166,7 @@ class MenuScreenState extends State<MenuScreen> {
                             ),
                           ),
                         ),
+                        // List of items under the current menuTitle
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

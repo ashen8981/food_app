@@ -14,6 +14,7 @@ class ItemViewModel extends ChangeNotifier {
 
   ItemViewModel(this.repository);
 
+  // Loads items for all categories based on the menus provided
   Future<void> loadItemsForAllCategories(List<Menu> menus) async {
     for (var menu in menus) {
       final categoryID = menu.menuID;
@@ -33,6 +34,7 @@ class ItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Retrieves items for the selected category, up to the current batch size
   List<Item> getItemsForSelectedCategory() {
     final items = selectedCategoryID == null ? allItems : itemsByCategory[selectedCategoryID] ?? [];
 

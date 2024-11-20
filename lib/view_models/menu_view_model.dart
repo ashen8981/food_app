@@ -11,12 +11,14 @@ class MenuViewModel extends ChangeNotifier {
 
   MenuViewModel(this.repository);
 
+  // Loads menus and items into the itemViewModel
   Future<void> loadMenusAndItems(ItemViewModel itemViewModel) async {
     menus = await repository.fetchMenus();
     await itemViewModel.loadItemsForAllCategories(menus);
     notifyListeners();
   }
 
+  // Selects a category and updates the corresponding itemViewModel
   void selectCategory(String title, String? menuID, ItemViewModel itemViewModel) {
     selectedMenuTitle = title;
     selectedCategoryID = menuID;

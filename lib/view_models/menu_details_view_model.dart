@@ -6,6 +6,8 @@ class ProductDetailsViewModel extends ChangeNotifier {
 
   int quantity = 1;
   int selectedSizeIndex = 1;
+
+  // Separate state for Toppings
   Map<String, int> toppings = {
     "Beef": 0,
     "Smoked Beef": 1,
@@ -14,9 +16,21 @@ class ProductDetailsViewModel extends ChangeNotifier {
     "Paprika": 0,
   };
 
+  // Separate state for Sub A
+  Map<String, int> subAItems = {
+    "Beef": 0,
+    "Smoked Beef": 1,
+    "Mozarella Cheese": 1,
+    "Mushroom": 1,
+    "Paprika": 2,
+  };
+
   int selectedTabIndex = 0;
   String? selectedAddTopping; // Tracks selected topping for the add button
   String? selectedRemoveTopping; // Tracks selected topping for the remove button
+
+  String? selectedAddSubAItem; // Tracks selected Sub A item for the add button
+  String? selectedRemoveSubAItem; // Tracks selected Sub A item for the remove button
 
   ProductDetailsViewModel({required this.item});
 
@@ -37,18 +51,36 @@ class ProductDetailsViewModel extends ChangeNotifier {
     }
   }
 
+  // Manage Topping State
   void incrementTopping(String topping) {
     toppings[topping] = (toppings[topping] ?? 0) + 1;
-    selectedAddTopping = topping; // Update the selected add button topping
-    selectedRemoveTopping = null; // Clear the remove selection
+    selectedAddTopping = topping;
+    selectedRemoveTopping = null;
     notifyListeners();
   }
 
   void decrementTopping(String topping) {
     if ((toppings[topping] ?? 0) > 0) {
       toppings[topping] = (toppings[topping] ?? 0) - 1;
-      selectedRemoveTopping = topping; // Update the selected remove button topping
-      selectedAddTopping = null; // Clear the add selection
+      selectedRemoveTopping = topping;
+      selectedAddTopping = null;
+      notifyListeners();
+    }
+  }
+
+  // Manage Sub A State
+  void incrementSubAItem(String subAItem) {
+    subAItems[subAItem] = (subAItems[subAItem] ?? 0) + 1;
+    selectedAddSubAItem = subAItem;
+    selectedRemoveSubAItem = null;
+    notifyListeners();
+  }
+
+  void decrementSubAItem(String subAItem) {
+    if ((subAItems[subAItem] ?? 0) > 0) {
+      subAItems[subAItem] = (subAItems[subAItem] ?? 0) - 1;
+      selectedRemoveSubAItem = subAItem;
+      selectedAddSubAItem = null;
       notifyListeners();
     }
   }

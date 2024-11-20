@@ -8,6 +8,7 @@ class Item {
   final String menuTitle;
   final double deliveryPrice;
   final bool isDealProduct;
+  final List<String> modifierGroupIDs;
 
   Item({
     required this.id,
@@ -19,6 +20,7 @@ class Item {
     required this.menuTitle,
     required this.deliveryPrice,
     required this.isDealProduct,
+    required this.modifierGroupIDs,
   });
 
   factory Item.fromJson(Map<String, dynamic> json, String menuTitle) {
@@ -33,6 +35,7 @@ class Item {
       menuTitle: menuTitle, // Set the menu title
       deliveryPrice: json['PriceInfo']['Price']['DeliveryPrice']?.toDouble() ?? 0.0,
       isDealProduct: json['MetaData']['IsDealProduct'] ?? false,
+      modifierGroupIDs: List<String>.from(json['ModifierGroupRules']['IDs'] ?? []),
     );
   }
 }

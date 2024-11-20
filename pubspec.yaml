@@ -25,7 +25,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/menus.json
+    - assets/json/menus.json
     - assets/images/menu_screen_img_1.png
     - assets/images/menu_bg_img_1.png
     - assets/icons/icon_1.png

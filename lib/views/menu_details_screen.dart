@@ -106,6 +106,14 @@ class ProductDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.02),
+                        CommonText(
+                          item.modifierGroupIDs.first,
+                          style: TextStyle(
+                            color: AppColors.greyTxtColor,
+                            fontSize: screenWidth * 0.035,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                         // Tab Row
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -308,7 +316,10 @@ class ProductDetailsScreen extends StatelessWidget {
                                   color: AppColors.greyDivColor,
                                 ),
                               ),
-                              ExpandableToppingsWidget(viewModel: viewModel),
+                              ExpandableToppingsWidget(
+                                viewModel: viewModel,
+                                isSubA: true,
+                              ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                                 child: Container(

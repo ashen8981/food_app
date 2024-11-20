@@ -5,8 +5,13 @@ import '../../../view_models/menu_details_view_model.dart';
 
 class ExpandableToppingsWidget extends StatefulWidget {
   final ProductDetailsViewModel viewModel;
+  final bool isSubA; // Flag to differentiate between Sub A and Toppings
 
-  const ExpandableToppingsWidget({super.key, required this.viewModel});
+  const ExpandableToppingsWidget({
+    super.key,
+    required this.viewModel,
+    this.isSubA = false,
+  });
 
   @override
   ExpandableToppingsWidgetState createState() => ExpandableToppingsWidgetState();
@@ -19,6 +24,9 @@ class ExpandableToppingsWidgetState extends State<ExpandableToppingsWidget> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    // Determine which state to use
+    final items = widget.isSubA ? widget.viewModel.subAItems : widget.viewModel.toppings;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,9 +73,13 @@ class ExpandableToppingsWidgetState extends State<ExpandableToppingsWidget> {
           Padding(
             padding: EdgeInsets.only(top: screenHeight * 0.01),
             child: Column(
-              children: widget.viewModel.toppings.keys.map((topping) {
-                bool isAddSelected = widget.viewModel.selectedAddTopping == topping;
-                bool isRemoveSelected = widget.viewModel.selectedRemoveTopping == topping;
+              children: items.keys.map((topping) {
+                bool isAddSelected = widget.isSubA
+                    ? widget.viewModel.selectedAddSubAItem == topping
+                    : widget.viewModel.selectedAddTopping == topping;
+                bool isRemoveSelected = widget.isSubA
+                    ? widget.viewModel.selectedRemoveSubAItem == topping
+                    : widget.viewModel.selectedRemoveTopping == topping;
 
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: screenHeight * 0.0075),
@@ -105,7 +117,9 @@ class ExpandableToppingsWidgetState extends State<ExpandableToppingsWidget> {
                                   color: isRemoveSelected ? Colors.white : AppColors.blackTxt3Color,
                                 ),
                                 onPressed: () {
-                                  widget.viewModel.decrementTopping(topping);
+                                  widget.isSubA
+                                      ? widget.viewModel.decrementSubAItem(topping)
+                                      : widget.viewModel.decrementTopping(topping);
                                 },
                               ),
                             ),
@@ -113,7 +127,7 @@ class ExpandableToppingsWidgetState extends State<ExpandableToppingsWidget> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
                             child: Text(
-                              widget.viewModel.toppings[topping].toString().padLeft(2, '0'),
+                              items[topping].toString().padLeft(2, '0'),
                               style: TextStyle(
                                 color: AppColors.blackTxt3Color,
                                 fontSize: screenWidth * 0.035,
@@ -142,7 +156,9 @@ class ExpandableToppingsWidgetState extends State<ExpandableToppingsWidget> {
                                   color: isAddSelected ? Colors.white : AppColors.blackTxt3Color,
                                 ),
                                 onPressed: () {
-                                  widget.viewModel.incrementTopping(topping);
+                                  widget.isSubA
+                                      ? widget.viewModel.incrementSubAItem(topping)
+                                      : widget.viewModel.incrementTopping(topping);
                                 },
                               ),
                             ),
